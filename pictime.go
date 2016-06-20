@@ -1,22 +1,21 @@
-// (C) Philip Schlump, 2014.
+package pictime
+
 /*
+
 Implementation of Picture date/time format in Go
 See http://www.codeproject.com/Articles/576178/cast-convert-format-try-parse-date-and-time-sql#2_2
 
 Example:
 	str, err := pictime.Format("YYYY/mm/dd", time.Now()) // 2014/05/07
 
+Copyright (C) Philip Schlump, 2014-2016.
+
 */
-package pictime
 
 import (
 	"fmt"
 	"regexp"
 	"time"
-)
-
-const (
-	Version = "0.2.3"
 )
 
 type pictimeFmt struct {
@@ -86,11 +85,10 @@ func repl(match string, t time.Time) string {
 	} else {
 		return match
 	}
-
-	panic(fmt.Errorf("unknown picture format directive - %s", match))
-	return ""
+	// panic(fmt.Errorf("unknown picture format directive - %s", match))
 }
 
+// Format applies the  picture format to the time 't' and returns the string or an error
 func Format(format string, t time.Time) (result string, err error) {
 	defer func() {
 		if e := recover(); e != nil {
@@ -105,10 +103,12 @@ func Format(format string, t time.Time) (result string, err error) {
 	return fmtRe.ReplaceAllStringFunc(format, fn), nil
 }
 
+// ZeroPadRight padds an string 's' with 0's on the right to the desired length, 'l'
 func ZeroPadRight(l int, s string) string {
 	return PadStrRight(l, "0", s)
 }
 
+// PadStrRight padds string on the right.  to a length of 'l' with 'w'
 func PadStrRight(l int, w string, s string) string {
 	if len(s) >= l {
 		return s
